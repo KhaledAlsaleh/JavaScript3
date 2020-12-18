@@ -8,12 +8,12 @@ Incorporate error handling: log to the console the error message
 */
 
 const url = "https://www.randomuser.me/api";
-const btnInfo = document.getElementById('userInfo');
-
+const userName = document.getElementById('userInfo');
+const btnInfo = document.getElementById('ShowData');
 
 // Creat HTTP Request Using XHR...
 
-function httpRequestUsingXHR(){
+function httpRequestUsingXHR1(){
     
     const xhr = new XMLHttpRequest();
 
@@ -23,23 +23,23 @@ function httpRequestUsingXHR(){
 
         if(xhr.status >= 200 && xhr.status < 400){
             console.log(xhr.response);
-            btnInfo.innerText = `${xhr.response.results[0].name.title} ${xhr.response.results[0].name.first} ${xhr.response.results[0].name.last} `;
-            btnInfo.style.color = "blue";
-            btnInfo.style.fontSize = "30px";
+            userName.innerText = `${xhr.response.results[0].name.title} ${xhr.response.results[0].name.first} ${xhr.response.results[0].name.last} `;
+            userName.style.color = "blue";
+            userName.style.fontSize = "30px";
         }
         else{  // 400 .. 500
             console.log("HTTP Error :", xhr.status);
-            btnInfo.innerText = `HTTP Error: ${xhr.status}`;
-            btnInfo.style.color = "red";
-            btnInfo.style.fontSize = "30px";
+            userName.innerText = `HTTP Error: ${xhr.status}`;
+            userName.style.color = "red";
+            userName.style.fontSize = "30px";
         }
     }
 
     xhr.onerror = function(){
         console.log("Something Went Wrong!");
-        btnInfo.innerText = "Something Went Wrong!";
-        btnInfo.style.color = "red";
-        btnInfo.style.fontSize = "30px";
+        userName.innerText = "Something Went Wrong!";
+        userName.style.color = "red";
+        userName.style.fontSize = "30px";
     }
 
     xhr.open("GET",url);
@@ -50,23 +50,23 @@ function httpRequestUsingXHR(){
 
 // Create HTTP Request Using Axios...
 
-function httpRequestUsingAxios(){
+function httpRequestUsingAxios1(){
 
     // Make a request for a user with a given ID
     axios.get(url)
     .then(function (response) {
         // handle success
         console.log(response);
-        btnInfo.innerText = `${response.data.results[0].name.title} ${response.data.results[0].name.first} ${response.data.results[0].name.last}`;
-        btnInfo.style.color = "green";
-        btnInfo.style.fontSize = "30px";
+        userName.innerText = `${response.data.results[0].name.title} ${response.data.results[0].name.first} ${response.data.results[0].name.last}`;
+        userName.style.color = "green";
+        userName.style.fontSize = "30px";
     })
     .catch(function (error) {
         // handle error
         console.log(error);
-        btnInfo.innerText = error;
-        btnInfo.style.color = "red";
-        btnInfo.style.fontSize = "30px";
+        userName.innerText = error;
+        userName.style.color = "red";
+        userName.style.fontSize = "30px";
     })
     .finally(function () {
         // always executed
@@ -76,7 +76,12 @@ function httpRequestUsingAxios(){
 }
 
 
-// Try To Run only One Of The Following Functions...
+window.onload = function (){
+    btnInfo.onclick = function(){
+        // Try To Run only One Of The Following Functions...
+        httpRequestUsingXHR1();  // Blue When Succeed And Red When Failed 
+        httpRequestUsingAxios1();   // Green When Succeed And Red When Failed  
+    }
+}
 
-httpRequestUsingXHR();        // Blue When Succeed And Red When Failed  
-httpRequestUsingAxios();   // Green When Succeed And Red When Failed 
+      
