@@ -52,7 +52,7 @@ function httpRequestUsingXHR1(){
 
 function httpRequestUsingAxios1(){
 
-    // Make a request for a user with a given ID
+    
     axios.get(url)
     .then(function (response) {
         // handle success
