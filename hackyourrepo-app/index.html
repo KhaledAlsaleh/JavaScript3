@@ -25,7 +25,7 @@
     <header>
       <p>HYF Repositories</p>
       <select id="chooseYourRepo">
-        <option selected>Select Your Repo</option>
+        <option selected value=" ">Select Your Repo</option>
         <option id="firstOption" value="0"></option>
         <option id="secondOption" value="1"></option>
         <option id="thirdOption" value="2"></option>
@@ -36,21 +36,29 @@
     <section id="container">
         
         <section id="leftSide">
-          <div class="leftDiv">Repository :</div> 
-          <span><a href="#" id="repoName"></a></span>
-          <br>
-          <div class="leftDiv">Description :</div>
-          <span id="repoDescription"></span>
-          <br>
-          <div class="leftDiv">Forks :</div>
-          <span id="repoForksNumbers"></span>
-          <br>
-          <div class="leftDiv">Updated :</div>
-          <span id="repoUpdateInfo"></span>
+          <table>
+            <tr>
+              <td class="leftTd">Repository :</td>
+              <td><a href="#" id="repoName"></a></td>
+            </tr>
+            <tr>
+              <td class="leftTd">Description :</td>
+              <td id="repoDescription"></td>
+            </tr>
+            <tr>
+              <td class="leftTd">Forks :</td>
+              <td id="repoForksNumbers"></td>
+            </tr>
+            <tr>
+              <td class="leftTd">Updated :</td>
+              <td id="repoUpdateInfo"></td>
+            </tr>
+          </table>
         </section>
 
         <section id="rightSide">
           <div>Contributors</div>
+          <div id="contributorsNames"></div>
         </section>
       </section>
 

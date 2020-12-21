@@ -26,13 +26,16 @@ const placeholderRepos = [
   },
 ];
 
-//console.log(placeholderRepos);
 
-// Sort as alphabetically-ordered list using sort function which has a call back function as a parameter 
-// This call back function expect 2 parameters [ which are 2 elements from the array ] return negative number, positive number or zero 
-// If the first argument should appear before the second argument then we return a negative number 
-// If the first argument should appear after the second argument then we return a positive number 
-// If they are equal then we return zero.
+/*
+
+Sort as alphabetically-ordered list using sort function which has a call back function as a parameter 
+This call back function expect 2 parameters [ which are 2 elements from the array ] return negative number, positive number or zero 
+If the first argument should appear before the second argument then we return a negative number 
+If the first argument should appear after the second argument then we return a positive number 
+If they are equal then we return zero.
+
+*/
 
 placeholderRepos.sort(function(a,b){
   if(a.name.toLowerCase() < b.name.toLowerCase()){
@@ -44,7 +47,7 @@ placeholderRepos.sort(function(a,b){
   return 0;
 });
 
-//console.log(placeholderRepos);
+
 
 const firstRepo = document.getElementById("firstOption");
 firstRepo.innerText = placeholderRepos[0].name;
@@ -61,11 +64,26 @@ const repoName = document.getElementById("repoName");
 const repoDescription = document.getElementById("repoDescription");
 const repoForksNumbers = document.getElementById("repoForksNumbers");
 const repoUpdateInfo = document.getElementById("repoUpdateInfo");
+const contributorsNames = document.getElementById("contributorsNames");
+
 
 
 chooseYourRepo.onclick = function(){
+  
+  if(chooseYourRepo.value == " "){
+    repoName.innerText = "";
+    repoDescription.innerText = "";
+    repoForksNumbers.innerText = "";
+    repoUpdateInfo.innerText = "";
+    contributorsNames.innerText = "";
+  }
+  
+ 
   repoName.innerText = placeholderRepos[chooseYourRepo.value].name;
   repoDescription.innerText = placeholderRepos[chooseYourRepo.value].description;
   repoForksNumbers.innerText = placeholderRepos[chooseYourRepo.value].forks;
   repoUpdateInfo.innerText = placeholderRepos[chooseYourRepo.value].updated;
+  contributorsNames.innerText = "We don't have contributors for this week!";    
 };
+
+
