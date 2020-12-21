@@ -20,6 +20,45 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+
+    
+    <header>
+      <p>HYF Repositories</p>
+      <select id="chooseYourRepo">
+        <option selected>Select Your Repo</option>
+        <option id="firstOption" value="0"></option>
+        <option id="secondOption" value="1"></option>
+        <option id="thirdOption" value="2"></option>
+      </select>
+    </header>
+
+    
+    <section id="container">
+        
+        <section id="leftSide">
+          <div class="leftDiv">Repository :</div> 
+          <span><a href="#" id="repoName"></a></span>
+          <br>
+          <div class="leftDiv">Description :</div>
+          <span id="repoDescription"></span>
+          <br>
+          <div class="leftDiv">Forks :</div>
+          <span id="repoForksNumbers"></span>
+          <br>
+          <div class="leftDiv">Updated :</div>
+          <span id="repoUpdateInfo"></span>
+        </section>
+
+        <section id="rightSide">
+          <div>Contributors</div>
+        </section>
+      </section>
+
+
+    <footer>
+      <p>HYF Repositories</p>
+    </footer>
+
     <script src="./script.js"></script>
   </body>
 </html>

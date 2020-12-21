@@ -1,3 +1,71 @@
 /* 
   Write here your CSS rules for HackYourRepo!
 */
+
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+header {
+  height: 80px;
+  width: 80%;
+  margin: 0 auto;
+  background-color: #3f51b5;
+  padding: 27px;
+}
+
+p {
+  color: white;
+  display: inline;
+  font-size: 20px;
+}
+
+select {
+  height: 30px;
+  width: 200px;
+  margin-left: 40px;
+}
+
+#container {
+  display: flex;
+  width: 80%;
+  min-height: 76vh;
+  margin: 0 auto;
+  background-color: white;
+  justify-content: space-around;
+}
+
+#leftSide {
+  padding: 10px;
+  margin: 3px;
+  width: 70%;
+  height: auto;
+  background-color: aliceblue;
+}
+#leftSide span {
+  display: inline-block;
+}
+.leftDiv {
+  display: inline-block;
+  width: 100px;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+#rightSide {
+  width: 30%;
+  height: 10%;
+  padding: 10px;
+  margin: 3px;
+  background-color: whitesmoke;
+}
+
+footer {
+  height: 80px;
+
+  background-color: #3f51b5;
+  padding: 27px;
+}
