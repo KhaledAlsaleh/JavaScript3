@@ -19,6 +19,16 @@ const Axiosbtn = document.getElementById('axiosRequest');
 const ulholder = document.createElement('ul');
 
 ulholder.style.listStyle = "none";
+XHRbtn.style.position = "fixed";
+Axiosbtn.style.position = "fixed";
+Axiosbtn.style.marginLeft = "200px";
+
+window.onscroll = function(){
+    
+    XHRbtn.style.backgroundColor = "transparent";
+    Axiosbtn.style.backgroundColor = "transparent";
+}
+
 
 // Creat HTTP Request Using XHR...
 
@@ -35,11 +45,14 @@ function httpRequestUsingXHR3(){
             //console.log(xhr.response);
 
             let dogImg = document.createElement('img');
-            dogImg.style.width = "500px";
-            dogImg.style.height = "500px";
+            dogImg.style.width = "250px";
+            dogImg.style.height = "250px";
             dogImg.src = xhr.response.message;
 
             let liholder = document.createElement('li');
+            liholder.style.display = "inline-block";
+            liholder.style.padding = "10px";
+            liholder.style.margin = "10px";
             liholder.appendChild(dogImg);
             
             ulholder.appendChild(liholder);
@@ -71,11 +84,14 @@ function httpRequestUsingAxios3(){
         // handle success
         console.log(response);
         let dogImg = document.createElement('img');
-        dogImg.style.width = "500px";
-        dogImg.style.height = "500px";
+        dogImg.style.width = "250px";
+        dogImg.style.height = "250px";
         dogImg.src = response.data.message;
 
         let liholder = document.createElement('li');
+        liholder.style.display = "inline-block";
+        liholder.style.padding = "10px";
+        liholder.style.margin = "10px";
         liholder.appendChild(dogImg);
         ulholder.appendChild(liholder);
         document.body.appendChild(ulholder);
@@ -94,6 +110,8 @@ function httpRequestUsingAxios3(){
 
 
 window.onload = function (){
+    
+    
     XHRbtn.onclick = function(){
         httpRequestUsingXHR3();  
     }
