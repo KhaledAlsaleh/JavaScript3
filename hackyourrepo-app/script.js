@@ -68,8 +68,14 @@ const contributorsNames = document.getElementById("contributorsNames");
 
 
 
-chooseYourRepo.onclick = function(){
-  
+chooseYourRepo.onchange = function(){  // we can also use onclick instead of onchange 
+ 
+
+  /* 
+  In Case First Option Is Enabled, Then We Got An Error Cannot read property 'name' of undefined [and this is logical because the value is " " and can't read name for undefind 
+  (not only name but also all proprities but name mention as first in line 83 so this is the first error we facing )]
+  */
+  /*  // In Case First Option Is Enabled, I used this code to clear all data 
   if(chooseYourRepo.value == " "){
     repoName.innerText = "";
     repoDescription.innerText = "";
@@ -77,7 +83,7 @@ chooseYourRepo.onclick = function(){
     repoUpdateInfo.innerText = "";
     contributorsNames.innerText = "";
   }
-  
+  */
  
   repoName.innerText = placeholderRepos[chooseYourRepo.value].name;
   repoDescription.innerText = placeholderRepos[chooseYourRepo.value].description;
