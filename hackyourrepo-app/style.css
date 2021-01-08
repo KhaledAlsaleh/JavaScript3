@@ -1,3 +1,152 @@
 /* 
   Write here your CSS rules for HackYourRepo!
 */
+
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  cursor: default;
+}
+
+header {
+  display: flex;
+  height: 80px;
+  width: 80%;
+  margin: 0 auto;
+  padding: 27px;
+  background-color: #3f51b5;
+}
+
+p {
+  color: white;
+  font-size: 20px;
+}
+
+select {
+  height: 30px;
+  width: 200px;
+  margin-left: 50px;
+}
+
+#container {
+  display: flex;
+  justify-content: space-around;
+  width: 80%;
+  min-height: calc(100vh - (80px -80px));
+  margin: 0 auto;
+  background-color: white;
+}
+
+#leftSide {
+  padding: 10px;
+  margin: 3px;
+  width: 70%;
+  height: fit-content;
+  line-height: 25px;
+  background-color: aliceblue;
+}
+
+.leftTd {
+  display: block;
+  width: 110px;
+  font-weight: bold;
+}
+
+#repoName {
+  cursor: pointer;
+}
+
+#rightSide {
+  width: 30%;
+  height: 10%;
+  padding: 10px;
+  margin: 3px;
+  line-height: 25px;
+  color: #3f51b5;
+  background-color: whitesmoke;
+}
+
+#contributorsNames {
+  color: black;
+}
+
+footer {
+  padding: 27px;
+  height: 80px;
+  background-color: #3f51b5;
+}
+
+/*  media-queries  */
+
+/* Smaller SmartPhones */
+
+@media (max-width: 480px) {
+  header {
+    width: 100%;
+  }
+  header p {
+    width: calc(100vw - 220px);
+    font-size: 18px;
+    margin-top: 5px;
+  }
+  #container {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  #leftSide {
+    width: 100%;
+    height: auto;
+  }
+  #rightSide {
+    width: 100%;
+  }
+}
+
+/* Tablets & Larger SmartPhones  */
+
+@media (min-width: 481px) and (max-width: 768px) {
+  header {
+    width: 80%;
+  }
+  header p {
+    width: 250px;
+    font-size: 18px;
+    margin-top: 5px;
+  }
+  #container {
+    width: 80%;
+    flex-wrap: wrap;
+  }
+  #leftSide {
+    width: 100%;
+    height: auto;
+  }
+  #rightSide {
+    width: 100%;
+  }
+}
+
+/* Laptops & Larger Tablets & Small Desktops  */
+
+@media (min-width: 769px) and (max-width: 1279px) {
+  header {
+    width: 80%;
+  }
+  header p {
+    font-size: 20px;
+    margin-top: 5px;
+  }
+  #container {
+    width: 80%;
+    flex-wrap: nowrap;
+  }
+  #leftSide {
+    width: 100%;
+    height: fit-content;
+  }
+  #rightSide {
+    width: 100%;
+  }
+}
