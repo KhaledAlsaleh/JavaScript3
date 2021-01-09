@@ -1,10 +1,6 @@
 "use strict";
 
-/*
-
-  Write here your JavaScript for HackYourRepo!
-
-*/
+/*  Write here your JavaScript for HackYourRepo!  */
 
 
 /*  Build The HTML Elements   */  
@@ -79,7 +75,7 @@ function appendChildren(){
 }
 
 
-/*  Assign ID & Classes & Property To The Elements  */
+/*  Assign ID & Classes & Properties To The Elements  */
 
 function assignProperty(){
 
@@ -88,7 +84,8 @@ function assignProperty(){
   leftSideSection.id = "leftSide";
   rightSideSection.id = "rightSide";
   contributorsBody.id = "contributorsNames";
-  // Give elements a semantic name 
+
+  // Give element's ID's a semantic name 
   document.getElementById('repoData11').id = "repoDescription";
   document.getElementById('repoData21').id = "repoForksNumbers";
   document.getElementById('repoData31').id = "repoUpdateInfo";
@@ -116,19 +113,27 @@ function addTextContent(){
 
 }
 
+
+/* Build The Logic & Fetching Data */
+
+function getRepoData (){
+  const url = 'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
+  fetch(url)
+  .then(response => response.json())
+  .then(jsonData => console.log(jsonData));
+}
+
+
+
+
+
+
+
 generateTable();
 appendChildren();
 assignProperty();
 addTextContent();
-
-
-
-
-
-
-
-
-
+getRepoData();
 // const placeholderRepos = [
 //   {
 //     name: 'SampleRepo1',
