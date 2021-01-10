@@ -264,7 +264,6 @@ function getReposContributors(url){
   })
   .then((jsonContributors) => createBodyContributors(jsonContributors))
   .catch((errorContributors) => {
-    // You Can Try This Error With hyfre-infr [no content with 203 error status code]
     contributorsError(errorContributors);
   });
   
