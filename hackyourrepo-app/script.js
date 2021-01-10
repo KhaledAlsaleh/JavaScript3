@@ -14,9 +14,6 @@
   const rightSideSection = document.createElement('SECTION');
   const contributorsHead = document.createElement('H4');
   const contributorsBody = document.createElement('DIV');
-  // const contributorsAvatar = document.createElement('IMG');
-  // const contributorsName = document.createElement('Div');
-  // const contributorsContributions = document.createElement('Div');
   const footer = document.createElement('FOOTER');
   const paragraphFooter = document.createElement('P');
 
@@ -64,10 +61,6 @@ function appendChildren(){
   header.appendChild(paragraphHeader);
   header.appendChild(selectYourRepo);
 
-  // contributorsBody.appendChild(contributorsAvatar);
-  // contributorsBody.appendChild(contributorsName);
-  // contributorsBody.appendChild(contributorsContributions);
-
   rightSideSection.appendChild(contributorsHead);
   rightSideSection.appendChild(contributorsBody);
 
@@ -100,10 +93,8 @@ function assignProperty(){
 
   firstOption.disabled = true;
   firstOption.selected = true;
-  firstOption.value = " ";
 
 }
-
 
 
 /*  Add Text Content To The Elements  */
@@ -122,32 +113,23 @@ function addTextContent(){
 
 }
 
+/* Build The Structure */
+
+function BuildStructure(){
+
+  generateTable();
+  appendChildren();
+  assignProperty();
+  addTextContent();
+  
+}
 
 
-generateTable();
-appendChildren();
-assignProperty();
-addTextContent();
-getReposData();
-
-
-//const repoName = document.getElementById("repoName");
-
-// const repoDescription = document.getElementById("repoDescription");
-// const repoForksNumbers = document.getElementById("repoForksNumbers");
-// const repoUpdateInfo = document.getElementById("repoUpdateInfo");
-
-
-
-// console.log(repoName);
-// console.log(repoDescription);
-// console.log(repoForksNumbers);
-// console.log(repoUpdateInfo);
-// console.log(contributorsBody);
 
 
 
 /* Create Array Of Repos Names */
+// It's Not Necessary To Create A Function Here Because [.map] Already Is A Built In Array Function
 
 function getReposNames(gitHubRepoApi){
   return gitHubRepoApi.map(element => element.name);
@@ -158,6 +140,7 @@ function getReposNames(gitHubRepoApi){
 // We Can Write A Shorthand For Sort Function : sort((a, b) => a.toLowerCase() > b.toLowerCase() ? 1 : -1);
 
 function sortReposNames (arrayOfNames){
+
   const orderdArray = arrayOfNames.sort(function(a,b){
     if(a.toLowerCase() < b.toLowerCase()){
       return -1;
@@ -168,54 +151,105 @@ function sortReposNames (arrayOfNames){
     return 0;
   });
   return orderdArray;
+
 }
 
 /* Create An Option For Each Repo & Append It To Select Tag & Give It innerText */
 
 function createOptions (arrayOfOrderdReposNames){
+
   arrayOfOrderdReposNames.forEach(element => {
     const newOption = document.createElement('OPTION');
     selectYourRepo.appendChild(newOption);
     newOption.innerText = element;
   });
+
 }
 
 /* Link Repo Name With Own Object */
+// Also Here It's Not Necessary To Create A Function Here Because [.find] Already Is A Built In Array Function
 
 function linkRepoNameWithOwnObject(jasonData,name){
+
   const foundRepoObj = jasonData.find(element => element.name === name)
   return foundRepoObj;
+
 }
+
 
 /* Create A BodyContributors For Each Contributors */
 
 function createBodyContributors(contributorsAPI){
+
   contributorsAPI.forEach(element => { 
+
     const contributorsChild = document.createElement('DIV');
     const contributorsAvatar = document.createElement('IMG');
     const contributorsName = document.createElement('a');
     const contributorsContributions = document.createElement('Div');
+
     contributorsChild.appendChild(contributorsAvatar);
     contributorsChild.appendChild(contributorsName);
     contributorsChild.appendChild(contributorsContributions);
     contributorsBody.appendChild(contributorsChild);
+
     contributorsAvatar.src = element.avatar_url;
     contributorsName.href = element.html_url;
     contributorsName.target = '_blank';
+
     contributorsName.innerText = element.login;
-    contributorsContributions.innerText = element.contributions;  
+    contributorsContributions.innerText = element.contributions; 
+
   });
+
 }
 
+
+
+
 /* Clear Data For Each Contributors */
+// This Function Doesn't Work 100% Because The Length At First Fetch Is Zero !!!!! 
+
+/*
 
 function clearContributorsData(contributorsBody){
-  for (let i = 0; i < contributorsBody.childNodes.length; i++) {
-    contributorsBody.removeChild(contributorsBody.childNodes[i]);
-    
+
+  for (let i = 0; i < contributorsBody.children.length; i++) {
+    contributorsBody.removeChild(contributorsBody.children[i]);
+  
   }
 }
 
+*/
+
+
+/* Contributors Error Function */
+
+function contributorsError(errorContributors){
+  
+  const contributorsErrorChild = document.createElement('DIV');
+  const contributorsParaError = document.createElement('P');
+
+  contributorsErrorChild.appendChild(contributorsParaError);
+  contributorsBody.appendChild(contributorsErrorChild);
+
+  contributorsParaError.innerText = "Error: " + errorContributors;
+
+}
+
+
+/* Main API Error Function */
+
+ function mainAPIError(mainError){
+
+  leftSideSection.style.display = "none";
+  rightSideSection.style.display = "none";
+  const mainErrorDiv = document.createElement('Div');
+  containerSection.appendChild(mainErrorDiv);
+  mainErrorDiv.id = 'mainError';
+  mainErrorDiv.innerText = "Error: Network request " + mainError;
+
+ }
 
 
 /* Get Contributors Data */
@@ -223,14 +257,15 @@ function clearContributorsData(contributorsBody){
 function getReposContributors(url){
   
   fetch(url)
-  .then(result => result.json())
-  .then(jsonContributors =>  {
-    createBodyContributors(jsonContributors);
-    //clearContributorsData();
-    return jsonContributors;
+  .then(result => {
+    if(result.status >= 200 && result.status < 400) {
+      return result.json()
+    }
   })
-  .catch((contributorsError) => {
-    contributorsName.innerText = contributorsError;
+  .then((jsonContributors) => createBodyContributors(jsonContributors))
+  .catch((errorContributors) => {
+    // You Can Try This Error With hyfre-infr [no content with 203 error status code]
+    contributorsError(errorContributors);
   });
   
 }
@@ -239,8 +274,9 @@ function getReposContributors(url){
 /*  Get Repos Info  */
 
 function getReposInfo(jsonData){
+
   selectYourRepo.onchange = function(){
-    clearContributorsData(contributorsBody);
+
     const myCurrentRepo = linkRepoNameWithOwnObject(jsonData,this.value);
     repoName.innerText = this.value;
     repoName.href = myCurrentRepo.html_url;
@@ -248,125 +284,49 @@ function getReposInfo(jsonData){
     repoForksNumbers.innerText = myCurrentRepo.forks;
     repoUpdateInfo.innerText = myCurrentRepo.updated_at.replace("T"," ").replace("Z"," ");
     getReposContributors(myCurrentRepo.contributors_url);
-    clearContributorsData(contributorsBody);
-    // console.log(contributorsBody.childNodes);
-    // console.log(contributorsBody.childNodes[0]);
-    // console.log(contributorsBody.childNodes[1]);
-    // console.log(contributorsBody.childNodes.length);
-    
+    //Make Contributors Empty On Change
+    contributorsBody.innerHTML = "";
+
   }
+
 }
 
-/* Build The Logic & Fetching Data */
+/* Build The Logic & Fetching Data From Main API */
 
 function getReposData (){
   const url = 'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
   fetch(url)
-  .then(response => response.json())
+  .then(response => { 
+    if(response.status >= 200 && response.status < 400) {
+      return response.json()
+    }
+  })
   .then( (jsonData) => {
+
     console.log(jsonData);
     const reposNames = getReposNames(jsonData);
     const reposNamesOrderd = sortReposNames(reposNames);
     createOptions(reposNamesOrderd);  
     getReposInfo(jsonData);
-
+  })
+  .catch(error =>{
+    mainAPIError(error);
   });
+}
+
+/* Main Function */
+
+function mainFunction(){
+  
+  BuildStructure();
+  getReposData();
+
 }
 
 
 
-
-
-
-
-
-
-
-// const placeholderRepos = [
-//   {
-//     name: 'SampleRepo1',
-//     description: 'This repository is meant to be a sample',
-//     forks: 5,
-//     updated: '2020-05-27 12:00:00',
-//   },
-//   {
-//     name: 'AndAnotherOne',
-//     description: 'Another sample repo! Can you believe it?',
-//     forks: 9,
-//     updated: '2020-05-27 12:00:00',
-//   },
-//   {
-//     name: 'HYF-Is-The-Best',
-//     description: "This repository contains all things HackYourFuture. That's because HYF is amazing!!!!",
-//     forks: 130,
-//     updated: '2020-05-27 12:00:00',
-//   },
-// ];
-
-
-// /*
-
-// Sort as alphabetically-ordered list using sort function which has a call back function as a parameter 
-// This call back function expect 2 parameters [ which are 2 elements from the array ] return negative number, positive number or zero 
-// If the first argument should appear before the second argument then we return a negative number 
-// If the first argument should appear after the second argument then we return a positive number 
-// If they are equal then we return zero.
-
-// */
-
-// placeholderRepos.sort(function(a,b){
-//   if(a.name.toLowerCase() < b.name.toLowerCase()){
-//     return -1;
-//   }
-//   if(a.name.toLowerCase() > b.name.toLowerCase()){
-//     return 1;
-//   }
-//   return 0;
-// });
-
-
-
-// const firstRepo = document.getElementById("firstOption");
-// firstRepo.innerText = placeholderRepos[0].name;
-
-// const secondRepo = document.getElementById("secondOption");
-// secondRepo.innerText = placeholderRepos[1].name;
-
-// const thirdRepo = document.getElementById("thirdOption");
-// thirdRepo.innerText = placeholderRepos[2].name;
-
-// const chooseYourRepo = document.getElementById("chooseYourRepo");
-
-// const repoName = document.getElementById("repoName");
-// const repoDescription = document.getElementById("repoDescription");
-// const repoForksNumbers = document.getElementById("repoForksNumbers");
-// const repoUpdateInfo = document.getElementById("repoUpdateInfo");
-// const contributorsNames = document.getElementById("contributorsNames");
-
-
-
-// chooseYourRepo.onchange = function(){  // we can also use onclick instead of onchange 
- 
-
-//   /* 
-//   In Case First Option Is Enabled, Then We Got An Error Cannot read property 'name' of undefined [and this is logical because the value is " " and can't read name for undefind 
-//   (not only name but also all proprities but name mention as first in line 83 so this is the first error we facing )]
-//   */
-//   /*  // In Case First Option Is Enabled, I used this code to clear all data 
-//   if(chooseYourRepo.value == " "){
-//     repoName.innerText = "";
-//     repoDescription.innerText = "";
-//     repoForksNumbers.innerText = "";
-//     repoUpdateInfo.innerText = "";
-//     contributorsNames.innerText = "";
-//   }
-//   */
- 
-//   repoName.innerText = placeholderRepos[chooseYourRepo.value].name;
-//   repoDescription.innerText = placeholderRepos[chooseYourRepo.value].description;
-//   repoForksNumbers.innerText = placeholderRepos[chooseYourRepo.value].forks;
-//   repoUpdateInfo.innerText = placeholderRepos[chooseYourRepo.value].updated;
-//   contributorsNames.innerText = "We don't have contributors for this week!";    
-// };
+window.onload = mainFunction;
+// Or 
+//window.onload = () => mainFunction();
 
 

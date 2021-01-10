@@ -119,6 +119,15 @@ h4 {
   padding: 3px;
 }
 
+#mainError {
+  padding: 10px;
+  margin: 3px;
+  color: red;
+  background-color: #f8d7da;
+  height: 100%;
+  width: 100%;
+}
+
 footer {
   padding: 27px;
   height: 80px;
