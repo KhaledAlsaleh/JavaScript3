@@ -12,8 +12,11 @@
   const containerSection = document.createElement('SECTION');
   const leftSideSection = document.createElement('SECTION');
   const rightSideSection = document.createElement('SECTION');
-  const contributorsHead = document.createElement('DIV');
+  const contributorsHead = document.createElement('H4');
   const contributorsBody = document.createElement('DIV');
+  // const contributorsAvatar = document.createElement('IMG');
+  // const contributorsName = document.createElement('Div');
+  // const contributorsContributions = document.createElement('Div');
   const footer = document.createElement('FOOTER');
   const paragraphFooter = document.createElement('P');
 
@@ -32,6 +35,7 @@ function generateTable() {
         const repoName = document.createElement('a');
         repoName.id = 'repoName';
         repoName.href = '#';
+        repoName.target = '_blank';
         cell.appendChild(repoName);  
       }
       if(j === 0){
@@ -59,7 +63,11 @@ function appendChildren(){
 
   header.appendChild(paragraphHeader);
   header.appendChild(selectYourRepo);
-  
+
+  // contributorsBody.appendChild(contributorsAvatar);
+  // contributorsBody.appendChild(contributorsName);
+  // contributorsBody.appendChild(contributorsContributions);
+
   rightSideSection.appendChild(contributorsHead);
   rightSideSection.appendChild(contributorsBody);
 
@@ -83,7 +91,7 @@ function assignProperty(){
   containerSection.id = "container";
   leftSideSection.id = "leftSide";
   rightSideSection.id = "rightSide";
-  contributorsBody.id = "contributorsNames";
+  contributorsBody.id = "contributorsBody";
 
   // Give element's ID's a semantic name 
   document.getElementById('repoData11').id = "repoDescription";
@@ -95,6 +103,7 @@ function assignProperty(){
   firstOption.value = " ";
 
 }
+
 
 
 /*  Add Text Content To The Elements  */
@@ -114,13 +123,154 @@ function addTextContent(){
 }
 
 
+
+generateTable();
+appendChildren();
+assignProperty();
+addTextContent();
+getReposData();
+
+
+//const repoName = document.getElementById("repoName");
+
+// const repoDescription = document.getElementById("repoDescription");
+// const repoForksNumbers = document.getElementById("repoForksNumbers");
+// const repoUpdateInfo = document.getElementById("repoUpdateInfo");
+
+
+
+// console.log(repoName);
+// console.log(repoDescription);
+// console.log(repoForksNumbers);
+// console.log(repoUpdateInfo);
+// console.log(contributorsBody);
+
+
+
+/* Create Array Of Repos Names */
+
+function getReposNames(gitHubRepoApi){
+  return gitHubRepoApi.map(element => element.name);
+}
+
+/* Build Sort Function */
+// We Can Use String.localeCompare() Also.
+// We Can Write A Shorthand For Sort Function : sort((a, b) => a.toLowerCase() > b.toLowerCase() ? 1 : -1);
+
+function sortReposNames (arrayOfNames){
+  const orderdArray = arrayOfNames.sort(function(a,b){
+    if(a.toLowerCase() < b.toLowerCase()){
+      return -1;
+    }
+    if(a.toLowerCase() > b.toLowerCase()){
+      return 1;
+    }
+    return 0;
+  });
+  return orderdArray;
+}
+
+/* Create An Option For Each Repo & Append It To Select Tag & Give It innerText */
+
+function createOptions (arrayOfOrderdReposNames){
+  arrayOfOrderdReposNames.forEach(element => {
+    const newOption = document.createElement('OPTION');
+    selectYourRepo.appendChild(newOption);
+    newOption.innerText = element;
+  });
+}
+
+/* Link Repo Name With Own Object */
+
+function linkRepoNameWithOwnObject(jasonData,name){
+  const foundRepoObj = jasonData.find(element => element.name === name)
+  return foundRepoObj;
+}
+
+/* Create A BodyContributors For Each Contributors */
+
+function createBodyContributors(contributorsAPI){
+  contributorsAPI.forEach(element => { 
+    const contributorsChild = document.createElement('DIV');
+    const contributorsAvatar = document.createElement('IMG');
+    const contributorsName = document.createElement('a');
+    const contributorsContributions = document.createElement('Div');
+    contributorsChild.appendChild(contributorsAvatar);
+    contributorsChild.appendChild(contributorsName);
+    contributorsChild.appendChild(contributorsContributions);
+    contributorsBody.appendChild(contributorsChild);
+    contributorsAvatar.src = element.avatar_url;
+    contributorsName.href = element.html_url;
+    contributorsName.target = '_blank';
+    contributorsName.innerText = element.login;
+    contributorsContributions.innerText = element.contributions;  
+  });
+}
+
+/* Clear Data For Each Contributors */
+
+function clearContributorsData(contributorsBody){
+  for (let i = 0; i < contributorsBody.childNodes.length; i++) {
+    contributorsBody.removeChild(contributorsBody.childNodes[i]);
+    
+  }
+}
+
+
+
+/* Get Contributors Data */
+
+function getReposContributors(url){
+  
+  fetch(url)
+  .then(result => result.json())
+  .then(jsonContributors =>  {
+    createBodyContributors(jsonContributors);
+    //clearContributorsData();
+    return jsonContributors;
+  })
+  .catch((contributorsError) => {
+    contributorsName.innerText = contributorsError;
+  });
+  
+}
+
+
+/*  Get Repos Info  */
+
+function getReposInfo(jsonData){
+  selectYourRepo.onchange = function(){
+    clearContributorsData(contributorsBody);
+    const myCurrentRepo = linkRepoNameWithOwnObject(jsonData,this.value);
+    repoName.innerText = this.value;
+    repoName.href = myCurrentRepo.html_url;
+    repoDescription.innerText = myCurrentRepo.description;
+    repoForksNumbers.innerText = myCurrentRepo.forks;
+    repoUpdateInfo.innerText = myCurrentRepo.updated_at.replace("T"," ").replace("Z"," ");
+    getReposContributors(myCurrentRepo.contributors_url);
+    clearContributorsData(contributorsBody);
+    // console.log(contributorsBody.childNodes);
+    // console.log(contributorsBody.childNodes[0]);
+    // console.log(contributorsBody.childNodes[1]);
+    // console.log(contributorsBody.childNodes.length);
+    
+  }
+}
+
 /* Build The Logic & Fetching Data */
 
-function getRepoData (){
+function getReposData (){
   const url = 'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
   fetch(url)
   .then(response => response.json())
-  .then(jsonData => console.log(jsonData));
+  .then( (jsonData) => {
+    console.log(jsonData);
+    const reposNames = getReposNames(jsonData);
+    const reposNamesOrderd = sortReposNames(reposNames);
+    createOptions(reposNamesOrderd);  
+    getReposInfo(jsonData);
+
+  });
 }
 
 
@@ -129,11 +279,9 @@ function getRepoData (){
 
 
 
-generateTable();
-appendChildren();
-assignProperty();
-addTextContent();
-getRepoData();
+
+
+
 // const placeholderRepos = [
 //   {
 //     name: 'SampleRepo1',
