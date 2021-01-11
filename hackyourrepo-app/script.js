@@ -302,8 +302,6 @@ function getReposData (){
     }
   })
   .then( (jsonData) => {
-
-    console.log(jsonData);
     const reposNames = getReposNames(jsonData);
     const reposNamesOrderd = sortReposNames(reposNames);
     createOptions(reposNamesOrderd);  
