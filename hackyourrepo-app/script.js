@@ -115,7 +115,7 @@ function addTextContent(){
 
 /* Build The Structure */
 
-function BuildStructure(){
+function buildStructure(){
 
   generateTable();
   appendChildren();
@@ -317,7 +317,7 @@ function getReposData (){
 
 function mainFunction(){
   
-  BuildStructure();
+  buildStructure();
   getReposData();
 
 }
