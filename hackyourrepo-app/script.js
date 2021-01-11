@@ -253,7 +253,8 @@ function contributorsError(errorContributors){
 
 
 /* Get Contributors Data */
-
+// Since Fetch Return A Promise, We Can Fetch Contributors Data After Fetch Repos Data , In The Same Function [And Next Then Will Handle This Promise]
+// I Choose This Way , Because In Next Week We Have To Modularization The Code.
 function getReposContributors(url){
   
   fetch(url)
