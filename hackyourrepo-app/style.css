@@ -1,3 +1,217 @@
 /* 
   Write here your CSS rules for HackYourRepo!
+  
 */
+
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  cursor: default;
+}
+
+header {
+  display: flex;
+  height: 80px;
+  width: 80%;
+  margin: 0 auto;
+  padding: 27px;
+  background-color: #3f51b5;
+}
+
+p {
+  color: white;
+  font-size: 20px;
+}
+
+select {
+  height: 30px;
+  width: 200px;
+  margin-left: 50px;
+}
+
+#container {
+  display: flex;
+  justify-content: space-around;
+  width: 80%;
+  min-height: calc(100vh - (80px -80px));
+  margin: 0 auto;
+  background-color: white;
+}
+
+#leftSide {
+  padding: 10px;
+  margin: 3px;
+  width: 50%;
+  height: fit-content;
+  line-height: 25px;
+  background-color: whitesmoke;
+}
+
+.leftTd {
+  display: block;
+  width: 110px;
+  font-weight: bold;
+}
+
+#repoName {
+  cursor: pointer;
+}
+
+#rightSide {
+  width: 50%;
+  height: fit-content;
+  padding: 0px;
+  margin: 3px;
+  line-height: 25px;
+  color: #3f51b5;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+h4 {
+  margin: 0px;
+  padding: 10px;
+  background-color: whitesmoke;
+}
+
+#contributorsBody {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-content: space-around;
+  background-color: white;
+  width: 100%;
+  height: fit-content;
+}
+
+#contributorsBody > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 1px solid #3f51b5;
+  align-items: center;
+  padding: 10px;
+  margin: 3px;
+}
+
+#contributorsBody div a {
+  text-decoration: none;
+  cursor: pointer;
+  width: 150px;
+  margin-left: -200px;
+}
+
+#contributorsBody div img {
+  width: 70px;
+  height: 70px;
+}
+
+#contributorsBody div div {
+  background-color: gray;
+  color: white;
+  width: 40px;
+  height: 30px;
+  border-radius: 8px;
+  text-align: center;
+  padding: 3px;
+}
+
+#mainError {
+  padding: 10px;
+  margin: 3px;
+  color: red;
+  background-color: #f8d7da;
+  height: 100%;
+  width: 100%;
+}
+
+footer {
+  padding: 27px;
+  height: 80px;
+  background-color: #3f51b5;
+}
+
+/*  media-queries  */
+
+/* Smaller SmartPhones */
+
+@media (max-width: 480px) {
+  header {
+    width: 100%;
+  }
+  header p {
+    width: calc(100vw - 220px);
+    font-size: 18px;
+    margin-top: 5px;
+  }
+  #container {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  #leftSide {
+    width: 100%;
+    height: fit-content;
+  }
+  #rightSide {
+    width: 100%;
+  }
+  #contributorsBody div a {
+    margin-left: 0px;
+  }
+}
+
+/* Tablets & Larger SmartPhones  */
+
+@media (min-width: 481px) and (max-width: 768px) {
+  header {
+    width: 80%;
+  }
+  header p {
+    width: 250px;
+    font-size: 18px;
+    margin-top: 5px;
+  }
+  #container {
+    width: 80%;
+    flex-wrap: wrap;
+  }
+  #leftSide {
+    width: 100%;
+    height: fit-content;
+  }
+  #rightSide {
+    width: 100%;
+  }
+  #contributorsBody div a {
+    margin-left: 0px;
+  }
+}
+
+/* Laptops & Larger Tablets & Small Desktops  */
+
+@media (min-width: 769px) and (max-width: 1279px) {
+  header {
+    width: 80%;
+  }
+  header p {
+    font-size: 20px;
+    margin-top: 5px;
+  }
+  #container {
+    width: 80%;
+    flex-wrap: nowrap;
+  }
+  #leftSide {
+    width: 100%;
+    height: fit-content;
+  }
+  #rightSide {
+    width: 100%;
+  }
+  #contributorsBody div a {
+    margin-left: 0px;
+  }
+}
