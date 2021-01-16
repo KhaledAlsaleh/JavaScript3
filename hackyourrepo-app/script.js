@@ -14,6 +14,7 @@
   const rightSideSection = document.createElement('SECTION');
   const contributorsHead = document.createElement('H4');
   const contributorsBody = document.createElement('DIV');
+  const contributorsEmpty = document.createElement('SPAN');
   const footer = document.createElement('FOOTER');
   const paragraphFooter = document.createElement('P');
 
@@ -85,6 +86,7 @@ function assignProperty(){
   leftSideSection.id = "leftSide";
   rightSideSection.id = "rightSide";
   contributorsBody.id = "contributorsBody";
+  contributorsEmpty.id = "contributorsEmpty";
 
   // Give element's ID's a semantic name 
   document.getElementById('repoData11').id = "repoDescription";
@@ -180,7 +182,7 @@ function linkRepoNameWithOwnObject(jasonData,name){
 /* Create A BodyContributors For Each Contributors */
 
 function createBodyContributors(contributorsAPI){
-
+  
   contributorsAPI.forEach(element => { 
 
     const contributorsChild = document.createElement('DIV');
@@ -192,14 +194,14 @@ function createBodyContributors(contributorsAPI){
     contributorsChild.appendChild(contributorsName);
     contributorsChild.appendChild(contributorsContributions);
     contributorsBody.appendChild(contributorsChild);
-
+  
     contributorsAvatar.src = element.avatar_url;
     contributorsName.href = element.html_url;
     contributorsName.target = '_blank';
-
+  
     contributorsName.innerText = element.login;
     contributorsContributions.innerText = element.contributions; 
-
+   
   });
 
 }
@@ -224,12 +226,15 @@ function clearContributorsData(contributorsBody){
 
 
 /* Contributors Error Function */
-
+// You Can Test This Error With hyfer-infra Repository
 function contributorsError(errorContributors){
   
-  const contributorsErrorChild = document.createElement('DIV');
+  const contributorsErrorChild = document.createElement('SPAN');
   const contributorsParaError = document.createElement('P');
 
+  contributorsErrorChild.id = "contributorsErrorChild";
+  contributorsParaError.id = "contributorsParaError";
+  
   contributorsErrorChild.appendChild(contributorsParaError);
   contributorsBody.appendChild(contributorsErrorChild);
 
@@ -263,7 +268,15 @@ function getReposContributors(url){
       return result.json()
     }
   })
-  .then((jsonContributors) => createBodyContributors(jsonContributors))
+  .then((jsonContributors) => {
+    // You Can Test This Condition With class23-project & DataStructures Repositories
+    if(jsonContributors.length == 0){ 
+      contributorsBody.appendChild(contributorsEmpty);
+      contributorsEmpty.textContent = "No Contributors For This Repository!";
+    }else{
+      createBodyContributors(jsonContributors);
+    }
+  })
   .catch((errorContributors) => {
     contributorsError(errorContributors);
   });
