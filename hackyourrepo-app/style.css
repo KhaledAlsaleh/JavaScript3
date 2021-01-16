@@ -119,6 +119,48 @@ h4 {
   padding: 3px;
 }
 
+#containerPagination {
+  width: 100%;
+  height: fit-content;
+  padding: 10px;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  background-color: whitesmoke;
+}
+
+.buttonPagination {
+  background-color: gray;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 10px;
+}
+
+#leftButtonPagination {
+  font-size: 30px;
+}
+
+#rightButtonPagination {
+  font-size: 30px;
+}
+
+#contributorsParaError {
+  color: red;
+}
+
+#contributorsError {
+  padding: 10px;
+  margin: 3px 0;
+  color: red;
+  background-color: #f8d7da;
+  height: 100%;
+  width: 100%;
+  border: 0px solid white;
+}
+
 #mainError {
   padding: 10px;
   margin: 3px;

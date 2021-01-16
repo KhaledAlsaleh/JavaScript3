@@ -14,6 +14,10 @@
   const rightSideSection = document.createElement('SECTION');
   const contributorsHead = document.createElement('H4');
   const contributorsBody = document.createElement('DIV');
+  const containerPagination = document.createElement('DIV');
+  const leftButtonPagination = document.createElement('BUTTON');
+  //const currentButtonPagination = document.createElement('BUTTON');
+  const rightButtonPagination = document.createElement('BUTTON');
   const footer = document.createElement('FOOTER');
   const paragraphFooter = document.createElement('P');
 
@@ -61,8 +65,13 @@ function appendChildren(){
   header.appendChild(paragraphHeader);
   header.appendChild(selectYourRepo);
 
+  containerPagination.appendChild(leftButtonPagination);
+  containerPagination.appendChild(rightButtonPagination);
+
   rightSideSection.appendChild(contributorsHead);
   rightSideSection.appendChild(contributorsBody);
+  rightSideSection.appendChild(containerPagination);
+
 
   containerSection.appendChild(leftSideSection);
   containerSection.appendChild(rightSideSection);
@@ -85,11 +94,19 @@ function assignProperty(){
   leftSideSection.id = "leftSide";
   rightSideSection.id = "rightSide";
   contributorsBody.id = "contributorsBody";
+  containerPagination.id = "containerPagination";
+  leftButtonPagination.id = "leftButtonPagination";
+  rightButtonPagination.id = "rightButtonPagination";
 
   // Give element's ID's a semantic name 
   document.getElementById('repoData11').id = "repoDescription";
   document.getElementById('repoData21').id = "repoForksNumbers";
   document.getElementById('repoData31').id = "repoUpdateInfo";
+
+  leftButtonPagination.classList.add("buttonPagination");
+  rightButtonPagination.classList.add("buttonPagination");
+
+  containerPagination.style.visibility = "hidden";
 
   firstOption.disabled = true;
   firstOption.selected = true;
@@ -106,12 +123,17 @@ function addTextContent(){
   firstOption.textContent = "Select Your Repo";
   contributorsHead.textContent = "Contributors";
 
+  leftButtonPagination.textContent = "<";
+  rightButtonPagination.textContent = ">";
+
   document.getElementById('repoInfo00').textContent = "Repository :";
   document.getElementById('repoInfo10').textContent = "Description :";
   document.getElementById('repoInfo20').textContent = "Forks :";
   document.getElementById('repoInfo30').textContent = "Updated :";
 
 }
+
+
 
 /* Build The Structure */
 
@@ -176,32 +198,50 @@ function linkRepoNameWithOwnObject(jasonData,name){
 
 }
 
+/* Create A Pagination */
+
+function createPagination(arrayOfContributors){
+  for(let i = 0; i < (arrayOfContributors.length/5)+1 ;i++){
+
+  }
+
+}
+
 
 /* Create A BodyContributors For Each Contributors */
 
 function createBodyContributors(contributorsAPI){
+  // console.log('what',contributorsAPI.length);
+  // if(contributorsAPI.length === 0 || contributorsAPI.length ===""){
+  //   console.log('hi');
+  //   contributorsBody.style.visibility = "hidden";
+  //   containerPagination.style.visibility = "hidden";
+  // }
+  // else{
+      console.log(contributorsAPI);
+      contributorsBody.style.visibility = "visible";
+      contributorsAPI.forEach(element => { 
+      
+        const contributorsChild = document.createElement('DIV');
+        const contributorsAvatar = document.createElement('IMG');
+        const contributorsName = document.createElement('a');
+        const contributorsContributions = document.createElement('Div');
 
-  contributorsAPI.forEach(element => { 
+        contributorsChild.appendChild(contributorsAvatar);
+        contributorsChild.appendChild(contributorsName);
+        contributorsChild.appendChild(contributorsContributions);
+        contributorsBody.appendChild(contributorsChild);
 
-    const contributorsChild = document.createElement('DIV');
-    const contributorsAvatar = document.createElement('IMG');
-    const contributorsName = document.createElement('a');
-    const contributorsContributions = document.createElement('Div');
+        contributorsAvatar.src = element.avatar_url;
+        contributorsName.href = element.html_url;
+        contributorsName.target = '_blank';
 
-    contributorsChild.appendChild(contributorsAvatar);
-    contributorsChild.appendChild(contributorsName);
-    contributorsChild.appendChild(contributorsContributions);
-    contributorsBody.appendChild(contributorsChild);
+        contributorsName.innerText = element.login;
+        contributorsContributions.innerText = element.contributions; 
 
-    contributorsAvatar.src = element.avatar_url;
-    contributorsName.href = element.html_url;
-    contributorsName.target = '_blank';
-
-    contributorsName.innerText = element.login;
-    contributorsContributions.innerText = element.contributions; 
-
-  });
-
+      });
+  // }
+  
 }
 
 
@@ -227,13 +267,16 @@ function clearContributorsData(contributorsBody){
 
 function contributorsError(errorContributors){
   
-  const contributorsErrorChild = document.createElement('DIV');
+  const contributorsErrorChild = document.createElement('SPAN');
   const contributorsParaError = document.createElement('P');
 
   contributorsErrorChild.appendChild(contributorsParaError);
   contributorsBody.appendChild(contributorsErrorChild);
 
-  contributorsParaError.innerText = "Error: " + errorContributors;
+  contributorsErrorChild.id = "contributorsError";
+  contributorsParaError.id = "contributorsParaError";
+
+  contributorsParaError.textContent = errorContributors;
 
 }
 
@@ -263,9 +306,15 @@ function getReposContributors(url){
       return result.json()
     }
   })
-  .then((jsonContributors) => createBodyContributors(jsonContributors))
+  .then((jsonContributors) => {
+    console.log(jsonContributors.length);
+    createBodyContributors(jsonContributors);
+  })
   .catch((errorContributors) => {
+    containerPagination.style.visibility = "hidden";
     contributorsError(errorContributors);
+    console.log(errorContributors);
+    
   });
   
 }
@@ -276,7 +325,7 @@ function getReposContributors(url){
 function getReposInfo(jsonData){
 
   selectYourRepo.onchange = function(){
-
+    containerPagination.style.visibility = "visible";
     const myCurrentRepo = linkRepoNameWithOwnObject(jsonData,this.value);
     repoName.innerText = this.value;
     repoName.href = myCurrentRepo.html_url;
