@@ -14,10 +14,10 @@
   const rightSideSection = document.createElement('SECTION');
   const contributorsHead = document.createElement('H4');
   const contributorsBody = document.createElement('DIV');
+  const contributorsEmpty = document.createElement('SPAN');
   const containerPagination = document.createElement('DIV');
-  const leftButtonPagination = document.createElement('BUTTON');
-  //const currentButtonPagination = document.createElement('BUTTON');
-  const rightButtonPagination = document.createElement('BUTTON');
+  const previousButtonPagination = document.createElement('BUTTON');
+  const nextButtonPagination = document.createElement('BUTTON');
   const footer = document.createElement('FOOTER');
   const paragraphFooter = document.createElement('P');
 
@@ -65,9 +65,6 @@ function appendChildren(){
   header.appendChild(paragraphHeader);
   header.appendChild(selectYourRepo);
 
-  containerPagination.appendChild(leftButtonPagination);
-  containerPagination.appendChild(rightButtonPagination);
-
   rightSideSection.appendChild(contributorsHead);
   rightSideSection.appendChild(contributorsBody);
   rightSideSection.appendChild(containerPagination);
@@ -94,17 +91,18 @@ function assignProperty(){
   leftSideSection.id = "leftSide";
   rightSideSection.id = "rightSide";
   contributorsBody.id = "contributorsBody";
+  contributorsEmpty.id = "contributorsEmpty";
   containerPagination.id = "containerPagination";
-  leftButtonPagination.id = "leftButtonPagination";
-  rightButtonPagination.id = "rightButtonPagination";
+  previousButtonPagination.id = "leftButtonPagination";
+  nextButtonPagination.id = "rightButtonPagination";
 
   // Give element's ID's a semantic name 
   document.getElementById('repoData11').id = "repoDescription";
   document.getElementById('repoData21').id = "repoForksNumbers";
   document.getElementById('repoData31').id = "repoUpdateInfo";
 
-  leftButtonPagination.classList.add("buttonPagination");
-  rightButtonPagination.classList.add("buttonPagination");
+  previousButtonPagination.classList.add("buttonPagination");
+  nextButtonPagination.classList.add("buttonPagination");
 
   containerPagination.style.visibility = "hidden";
 
@@ -122,14 +120,15 @@ function addTextContent(){
   paragraphFooter.textContent = "HYF Repositories";
   firstOption.textContent = "Select Your Repo";
   contributorsHead.textContent = "Contributors";
-
-  leftButtonPagination.textContent = "<";
-  rightButtonPagination.textContent = ">";
-
+  
+  
   document.getElementById('repoInfo00').textContent = "Repository :";
   document.getElementById('repoInfo10').textContent = "Description :";
   document.getElementById('repoInfo20').textContent = "Forks :";
   document.getElementById('repoInfo30').textContent = "Updated :";
+
+  previousButtonPagination.textContent = "<";
+  nextButtonPagination.textContent = ">";
 
 }
 
@@ -198,27 +197,13 @@ function linkRepoNameWithOwnObject(jasonData,name){
 
 }
 
-/* Create A Pagination */
 
-function createPagination(arrayOfContributors){
-  for(let i = 0; i < (arrayOfContributors.length/5)+1 ;i++){
-
-  }
-
-}
 
 
 /* Create A BodyContributors For Each Contributors */
 
 function createBodyContributors(contributorsAPI){
-  // console.log('what',contributorsAPI.length);
-  // if(contributorsAPI.length === 0 || contributorsAPI.length ===""){
-  //   console.log('hi');
-  //   contributorsBody.style.visibility = "hidden";
-  //   containerPagination.style.visibility = "hidden";
-  // }
-  // else{
-      console.log(contributorsAPI);
+      
       contributorsBody.style.visibility = "visible";
       contributorsAPI.forEach(element => { 
       
@@ -238,13 +223,11 @@ function createBodyContributors(contributorsAPI){
 
         contributorsName.innerText = element.login;
         contributorsContributions.innerText = element.contributions; 
-
+        
       });
-  // }
-  
+      
+      
 }
-
-
 
 
 /* Clear Data For Each Contributors */
@@ -264,7 +247,7 @@ function clearContributorsData(contributorsBody){
 
 
 /* Contributors Error Function */
-
+//You Can Test This Error With hyfer-infra Repository
 function contributorsError(errorContributors){
   
   const contributorsErrorChild = document.createElement('SPAN');
@@ -294,6 +277,80 @@ function contributorsError(errorContributors){
 
  }
 
+/* Pagination */
+
+function linkButtonWithPage(pagesArray,buttonsNum){
+ // contributorsBody.style.display = "initial";
+ // console.log("pageeee",pagesArray[0]);
+ createBodyContributors(pagesArray[0]);
+ buttonsNum[0].classList.add("active");
+  buttonsNum.forEach((element,index) =>{
+    element.onclick = function(){
+      contributorsBody.innerHTML = "";
+      createBodyContributors(pagesArray[index]);
+      removeActive(buttonsNum);
+      element.classList.add("active");
+    }
+  });
+}
+
+function removeActive(allButtons){
+  allButtons.forEach(ele =>{
+    ele.classList.remove("active");
+  });
+
+}
+
+
+function createPagination(arrayOfContributers){
+  
+    let itemsNumber = arrayOfContributers.length;
+    let itemPerPage = 5;
+    let numberOfPages = Math.ceil(itemsNumber / itemPerPage);
+    containerPagination.appendChild(previousButtonPagination);
+    let itemstamplet = [];
+    let pagesTamplet = [];
+    for(let i = 0; i < numberOfPages  ; i++){
+      let startItem = (itemPerPage * i) ;
+      let endItem = startItem + itemPerPage;
+      let pageItems = arrayOfContributers.slice(startItem,endItem);
+     // console.log(pageItems);
+    //  createBodyContributors(pageItems);
+    //  contributorsBody.style.display = "none";
+    
+      const btn = document.createElement("BUTTON");
+      btn.textContent = `${i+1}`;
+      containerPagination.appendChild(btn);
+      btn.classList.add("buttonPagination");
+      itemstamplet[i] = pageItems;
+      pagesTamplet[i] = btn;
+    }
+    linkButtonWithPage(itemstamplet,pagesTamplet);
+    console.log("Pages Tamplet",pagesTamplet);
+    console.log("Tamplet Items :",itemstamplet);
+    console.log("Number Of Pages",numberOfPages);
+    containerPagination.appendChild(nextButtonPagination);
+    
+}
+
+
+
+
+previousButtonPagination.onclick = previousPage;
+nextButtonPagination.onclick = nextPage;
+
+function previousPage(){
+  
+  console.log("Previous");
+}
+
+function nextPage(){
+  console.log("Next");
+}
+
+
+/*********************************************************************/
+
 
 /* Get Contributors Data */
 // Since Fetch Return A Promise, We Can Fetch Contributors Data After Fetch Repos Data , In The Same Function [And Next Then Will Handle This Promise]
@@ -307,14 +364,20 @@ function getReposContributors(url){
     }
   })
   .then((jsonContributors) => {
-    console.log(jsonContributors.length);
-    createBodyContributors(jsonContributors);
+    if(jsonContributors.length == 0){ 
+      contributorsBody.appendChild(contributorsEmpty);
+      contributorsEmpty.textContent = "No Contributors For This Repository!";
+      containerPagination.style.visibility = "hidden";
+    }else{
+   //   console.log(jsonContributors);
+   //   console.table(jsonContributors);
+      createPagination(jsonContributors);
+    //  createBodyContributors(jsonContributors);
+    }
   })
   .catch((errorContributors) => {
     containerPagination.style.visibility = "hidden";
-    contributorsError(errorContributors);
-    console.log(errorContributors);
-    
+    contributorsError(errorContributors);    
   });
   
 }
@@ -335,6 +398,8 @@ function getReposInfo(jsonData){
     getReposContributors(myCurrentRepo.contributors_url);
     //Make Contributors Empty On Change
     contributorsBody.innerHTML = "";
+    // Make Pagination Holder Empty On Change
+    containerPagination.innerHTML = "";
 
   }
 

@@ -27,7 +27,7 @@ p {
 
 select {
   height: 30px;
-  width: 200px;
+  width: 210px;
   margin-left: 50px;
 }
 
@@ -77,6 +77,13 @@ h4 {
   background-color: whitesmoke;
 }
 
+#contributorsEmpty {
+  background-color: whitesmoke;
+  margin: 3px 0;
+  padding: 10px;
+  color: #3f51b5;
+}
+
 #contributorsBody {
   color: black;
   display: flex;
@@ -123,9 +130,9 @@ h4 {
   width: 100%;
   height: fit-content;
   padding: 10px;
-  margin: 10px 0;
+  margin: 3px 0;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   background-color: whitesmoke;
 }
 
@@ -133,18 +140,21 @@ h4 {
   background-color: gray;
   color: white;
   width: 40px;
-  height: 40px;
+  height: 30px;
   border-radius: 8px;
+  border: 0px solid white;
   text-align: center;
-  margin: 10px;
+  margin: 3px;
 }
 
-#leftButtonPagination {
-  font-size: 30px;
+.buttonPagination:hover {
+  color: white;
+  background-color: #3f51b5;
 }
 
-#rightButtonPagination {
-  font-size: 30px;
+.active {
+  color: white;
+  background-color: #3f51b5;
 }
 
 #contributorsParaError {
