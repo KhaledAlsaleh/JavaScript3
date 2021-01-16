@@ -322,13 +322,13 @@ function createPagination(arrayOfContributers){
       btn.textContent = `${i+1}`;
       containerPagination.appendChild(btn);
       btn.classList.add("buttonPagination");
-      itemstamplet[i] = pageItems;
-      pagesTamplet[i] = btn;
+     // itemstamplet[i] = pageItems;
+    //  pagesTamplet[i] = btn;
     }
     linkButtonWithPage(itemstamplet,pagesTamplet);
-    console.log("Pages Tamplet",pagesTamplet);
-    console.log("Tamplet Items :",itemstamplet);
-    console.log("Number Of Pages",numberOfPages);
+  //  console.log("Pages Tamplet",pagesTamplet);
+ //   console.log("Tamplet Items :",itemstamplet);
+ //   console.log("Number Of Pages",numberOfPages);
     containerPagination.appendChild(nextButtonPagination);
     
 }
@@ -341,11 +341,11 @@ nextButtonPagination.onclick = nextPage;
 
 function previousPage(){
   
-  console.log("Previous");
+ // console.log("Previous");
 }
 
 function nextPage(){
-  console.log("Next");
+ // console.log("Next");
 }
 
 
