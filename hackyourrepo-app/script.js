@@ -280,7 +280,7 @@ function contributorsError(errorContributors){
 /* Pagination */
 
 function linkButtonWithPage(pagesArray,buttonsNum){
- // contributorsBody.style.display = "initial";
+  //contributorsBody.style.display = "initial";
  // console.log("pageeee",pagesArray[0]);
  createBodyContributors(pagesArray[0]);
  buttonsNum[0].classList.add("active");
@@ -314,21 +314,21 @@ function createPagination(arrayOfContributers){
       let startItem = (itemPerPage * i) ;
       let endItem = startItem + itemPerPage;
       let pageItems = arrayOfContributers.slice(startItem,endItem);
-     // console.log(pageItems);
-    //  createBodyContributors(pageItems);
-    //  contributorsBody.style.display = "none";
+      console.log(pageItems);
+      //createBodyContributors(pageItems);
+     // contributorsBody.style.display = "none";
     
       const btn = document.createElement("BUTTON");
       btn.textContent = `${i+1}`;
       containerPagination.appendChild(btn);
       btn.classList.add("buttonPagination");
-     // itemstamplet[i] = pageItems;
-    //  pagesTamplet[i] = btn;
+      itemstamplet[i] = pageItems;
+      pagesTamplet[i] = btn;
     }
     linkButtonWithPage(itemstamplet,pagesTamplet);
-  //  console.log("Pages Tamplet",pagesTamplet);
- //   console.log("Tamplet Items :",itemstamplet);
- //   console.log("Number Of Pages",numberOfPages);
+    console.log("Pages Tamplet",pagesTamplet);
+    console.log("Tamplet Items :",itemstamplet);
+    console.log("Number Of Pages",numberOfPages);
     containerPagination.appendChild(nextButtonPagination);
     
 }
@@ -340,12 +340,11 @@ previousButtonPagination.onclick = previousPage;
 nextButtonPagination.onclick = nextPage;
 
 function previousPage(){
-  
- // console.log("Previous");
+  console.log("Previous");
 }
 
 function nextPage(){
- // console.log("Next");
+  console.log("Next");
 }
 
 
@@ -400,6 +399,7 @@ function getReposInfo(jsonData){
     contributorsBody.innerHTML = "";
     // Make Pagination Holder Empty On Change
     containerPagination.innerHTML = "";
+    
 
   }
 
@@ -432,7 +432,6 @@ function mainFunction(){
   
   buildStructure();
   getReposData();
-
 }
 
 
