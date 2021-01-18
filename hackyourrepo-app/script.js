@@ -276,12 +276,18 @@ function contributorsError(errorContributors){
   mainErrorDiv.innerText = "Error: Network request " + mainError;
 
  }
+/*********************************************************************************** */
+/*********************************************************************************** */
+/*********************************************************************************** */
 
 /* Pagination */
 
+let itemsTamplet = [];
+let pagesTamplet = [];
+let currentPage;
 
-function statusNextPrevious(pageButtons,currentButton){
-  
+function statusNextPrevious(arrayOfPagesButtons,currentButton){
+
   if(currentButton === 0){
     previousButtonPagination.classList.add("disabled");
     previousButtonPagination.disabled = true;
@@ -290,7 +296,7 @@ function statusNextPrevious(pageButtons,currentButton){
     previousButtonPagination.classList.remove("disabled");
     previousButtonPagination.disabled = false;
   }
-  if(currentButton === pageButtons.length - 1){
+  if(currentButton === arrayOfPagesButtons.length - 1){
     nextButtonPagination.classList.add("disabled");
     nextButtonPagination.disabled = true;
   }
@@ -302,79 +308,124 @@ function statusNextPrevious(pageButtons,currentButton){
 }
 
 
-function initialStatus(buttonssssArr){
-    buttonssssArr[0].classList.add("active");
+function initialStatus(arrayOfPagesButtons){
+    
+    arrayOfPagesButtons[0].classList.add("active");
+
     previousButtonPagination.classList.add("disabled");
     previousButtonPagination.disabled = true;
-    if(buttonssssArr.length === 1){
-      nextButtonPagination.classList.add("disabled");
-      nextButtonPagination.disabled = true;
-    }else{
-      nextButtonPagination.classList.remove("disabled");
-      nextButtonPagination.disabled = false;
-    }
+
+    nextButtonPagination.classList.add("disabled");
+    nextButtonPagination.disabled = true;
+     
 }
 
-function linkButtonWithPage(pagesArray,buttonsNum){
 
-  createBodyContributors(pagesArray[0]);
-  initialStatus(buttonsNum);
-  var currentPage;
-  var currentbutton;
-  buttonsNum.forEach((element,index) =>{
-    
-    element.onclick = function(){
-      currentPage = index;
-      currentbutton = element;
-      statusNextPrevious(buttonsNum,index);
-      contributorsBody.innerHTML = "";
-      createBodyContributors(pagesArray[index]);
-      removeActive(buttonsNum);
-      element.classList.add("active");
+function doStep(arrayOfPages,arrayOfButtons,currentActiveButton,pageToGo){
 
-    //  console.log(currentPage);
-   // console.log(currentbutton);
+  contributorsBody.innerHTML = "";
+  createBodyContributors(arrayOfPages[pageToGo]); 
+  arrayOfButtons[currentActiveButton].classList.remove("active");
+  arrayOfButtons[pageToGo].classList.add("active");
+  
+}
+
+
+// Please Click On Any Button On Pagination To Active Next & Previous Buttons....
+
+function setupPreviousNextButtons(arrayOfPages,arrayOfButtons){
+
+  previousButtonPagination.onclick = function(){
+
+    let arrayOfPaginationDaynamicButtons = document.getElementsByClassName("buttonPaginationDaynamic");    
+    let currentActiveButton = currentButtonActive(arrayOfPaginationDaynamicButtons); 
+    let previousPage = currentActiveButton - 1;
+
+    if(currentActiveButton === 1){
+
+      doStep(arrayOfPages,arrayOfButtons,currentActiveButton,previousPage);
+      previousButtonPagination.classList.add("disabled");
+      previousButtonPagination.disabled = true;
+
+    }else if(currentActiveButton > 1 && currentActiveButton < arrayOfButtons.length-1){
+
+      doStep(arrayOfPages,arrayOfButtons,currentActiveButton,previousPage);
+
+    }else if(currentActiveButton === arrayOfButtons.length-1){
+
+      doStep(arrayOfPages,arrayOfButtons,currentActiveButton,previousPage);
+      nextButtonPagination.classList.remove("disabled");
+      nextButtonPagination.disabled = false;
 
     }
-    console.log(currentPage);
-    console.log(currentbutton);
-    previousButtonPagination.onclick = function(){
+
+  }
+
+
+
+  nextButtonPagination.onclick = function(){
+    
+    let arrayOfPaginationDaynamicButtons = document.getElementsByClassName("buttonPaginationDaynamic");
+    let currentActiveButton = currentButtonActive(arrayOfPaginationDaynamicButtons);
+    let nextPage = currentActiveButton + 1;
+   
+
+    if(currentActiveButton === arrayOfButtons.length-2){
+
+      doStep(arrayOfPages,arrayOfButtons,currentActiveButton,nextPage);  
+      nextButtonPagination.disabled = true;
+      nextButtonPagination.classList.add("disabled");
+
+    }else if(currentActiveButton > 0 && currentActiveButton < arrayOfButtons.length-1){
+
+      doStep(arrayOfPages,arrayOfButtons,currentActiveButton,nextPage); 
+
+    }else if(currentActiveButton === 0){
+
+      doStep(arrayOfPages,arrayOfButtons,currentActiveButton,nextPage);
+      previousButtonPagination.classList.remove("disabled");
+      previousButtonPagination.disabled = false;
+
+    }
+
+  }
+
+}
+
+
+function currentButtonActive(paginationButtons){
+  for(let currentPage=0; currentPage<paginationButtons.length; currentPage++){
+    if(paginationButtons[currentPage].classList.contains("active")){
+      return currentPage;    
+    }
+  }
+}
+
+
+
+function linkButtonWithPage(paginationPages,paginationButtons){
+  createBodyContributors(paginationPages[0]);
+  initialStatus(paginationButtons);
+
+  paginationButtons.forEach((button,index) =>{
+    
+    button.onclick = function(){
+      statusNextPrevious(paginationButtons,index);
       contributorsBody.innerHTML = "";
-      let previousPage = currentPage-1;
-      console.log(previousPage);
-      createBodyContributors(pagesArray[previousPage]);
-      currentbutton.classList.remove("active");
-      buttonsNum[previousPage].classList.add("active");
+      createBodyContributors(paginationPages[index]);
+      removeActive(paginationButtons);
+      button.classList.add("active"); 
       
     }
 
   });
+  
 }
 
-// function setupNextPrevious (arrayOfPages,arrayOfButtons,currentPage){
 
-
-//   previousButtonPagination.addEventListener("click", function(){
-//     contributorsBody.innerHTML = "";
-//     let previousPage = index-1;
-//     createBodyContributors(pagesArray[previousPage]);  
-    
-//   });
-//   nextButtonPagination.addEventListener("click", function(){
-//     contributorsBody.innerHTML = "";
-    
-//     let nextPage = index+1;
-//     console.log(index);
-//     console.log(nextPage);
-//     createBodyContributors(pagesArray[nextPage]); 
-     
-//   });
-// }
-
-
-function removeActive(allButtons){
-  allButtons.forEach(element =>{
-    element.classList.remove("active");
+function removeActive(paginationButtons){
+  paginationButtons.forEach(button =>{
+    button.classList.remove("active");
   });
 }
 
@@ -385,44 +436,33 @@ function createPagination(arrayOfContributers){
     let itemPerPage = 5;
     let numberOfPages = Math.ceil(itemsNumber / itemPerPage);
     containerPagination.appendChild(previousButtonPagination);
-    let itemstamplet = [];
-    let pagesTamplet = [];
+
     for(let i = 0; i < numberOfPages  ; i++){
       let startItem = (itemPerPage * i) ;
       let endItem = startItem + itemPerPage;
       let pageItems = arrayOfContributers.slice(startItem,endItem);
-      
-    
-      const btn = document.createElement("BUTTON");
-      btn.textContent = `${i+1}`;
-      containerPagination.appendChild(btn);
-      btn.classList.add("buttonPagination");
-      itemstamplet[i] = pageItems;
-      pagesTamplet[i] = btn;
+      const paginationButton = document.createElement("BUTTON");
+      paginationButton.textContent = `${i+1}`;
+      containerPagination.appendChild(paginationButton);
+      paginationButton.classList.add("buttonPaginationDaynamic");
+      itemsTamplet[i] = pageItems;
+      pagesTamplet[i] = paginationButton;
     }
-    linkButtonWithPage(itemstamplet,pagesTamplet);
+    
+    linkButtonWithPage(itemsTamplet,pagesTamplet);
+    setupPreviousNextButtons(itemsTamplet,pagesTamplet);
+    
     containerPagination.appendChild(nextButtonPagination);
     
-}
-
-
-
-
-// previousButtonPagination.onclick = previousPage;
-// nextButtonPagination.onclick = nextPage;
-
-// function previousPage(){
-//   console.log("Previous");
-  
-// }
-
-// function nextPage(){
-//   console.log("Next");
+} 
  
-// }
 
 
-/*********************************************************************/
+
+/*********************************************************************************** */
+/*********************************************************************************** */
+/*********************************************************************************** */
+
 
 
 /* Get Contributors Data */
@@ -442,10 +482,7 @@ function getReposContributors(url){
       contributorsEmpty.textContent = "No Contributors For This Repository!";
       containerPagination.style.visibility = "hidden";
     }else{
-   //   console.log(jsonContributors);
-   //   console.table(jsonContributors);
-      createPagination(jsonContributors);
-    //  createBodyContributors(jsonContributors);
+      createPagination(jsonContributors);  
     }
   })
   .catch((errorContributors) => {
@@ -461,6 +498,7 @@ function getReposContributors(url){
 function getReposInfo(jsonData){
 
   selectYourRepo.onchange = function(){
+    
     containerPagination.style.visibility = "visible";
     const myCurrentRepo = linkRepoNameWithOwnObject(jsonData,this.value);
     repoName.innerText = this.value;
@@ -474,7 +512,6 @@ function getReposInfo(jsonData){
     // Make Pagination Holder Empty On Change
     containerPagination.innerHTML = "";
     
-
   }
 
 }
@@ -503,7 +540,6 @@ function getReposData (){
 /* Main Function */
 
 function mainFunction(){
-  
   buildStructure();
   getReposData();
 }
@@ -513,5 +549,4 @@ function mainFunction(){
 window.onload = mainFunction;
 // Or 
 //window.onload = () => mainFunction();
-
 
