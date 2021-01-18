@@ -279,26 +279,103 @@ function contributorsError(errorContributors){
 
 /* Pagination */
 
+
+function statusNextPrevious(pageButtons,currentButton){
+  
+  if(currentButton === 0){
+    previousButtonPagination.classList.add("disabled");
+    previousButtonPagination.disabled = true;
+  }
+  else{
+    previousButtonPagination.classList.remove("disabled");
+    previousButtonPagination.disabled = false;
+  }
+  if(currentButton === pageButtons.length - 1){
+    nextButtonPagination.classList.add("disabled");
+    nextButtonPagination.disabled = true;
+  }
+  else{
+    nextButtonPagination.classList.remove("disabled");
+    nextButtonPagination.disabled = false;
+  }
+
+}
+
+
+function initialStatus(buttonssssArr){
+    buttonssssArr[0].classList.add("active");
+    previousButtonPagination.classList.add("disabled");
+    previousButtonPagination.disabled = true;
+    if(buttonssssArr.length === 1){
+      nextButtonPagination.classList.add("disabled");
+      nextButtonPagination.disabled = true;
+    }else{
+      nextButtonPagination.classList.remove("disabled");
+      nextButtonPagination.disabled = false;
+    }
+}
+
 function linkButtonWithPage(pagesArray,buttonsNum){
-  //contributorsBody.style.display = "initial";
- // console.log("pageeee",pagesArray[0]);
- createBodyContributors(pagesArray[0]);
- buttonsNum[0].classList.add("active");
+
+  createBodyContributors(pagesArray[0]);
+  initialStatus(buttonsNum);
+  var currentPage;
+  var currentbutton;
   buttonsNum.forEach((element,index) =>{
+    
     element.onclick = function(){
+      currentPage = index;
+      currentbutton = element;
+      statusNextPrevious(buttonsNum,index);
       contributorsBody.innerHTML = "";
       createBodyContributors(pagesArray[index]);
       removeActive(buttonsNum);
       element.classList.add("active");
+
+    //  console.log(currentPage);
+   // console.log(currentbutton);
+
     }
+    console.log(currentPage);
+    console.log(currentbutton);
+    previousButtonPagination.onclick = function(){
+      contributorsBody.innerHTML = "";
+      let previousPage = currentPage-1;
+      console.log(previousPage);
+      createBodyContributors(pagesArray[previousPage]);
+      currentbutton.classList.remove("active");
+      buttonsNum[previousPage].classList.add("active");
+      
+    }
+
   });
 }
 
-function removeActive(allButtons){
-  allButtons.forEach(ele =>{
-    ele.classList.remove("active");
-  });
+// function setupNextPrevious (arrayOfPages,arrayOfButtons,currentPage){
 
+
+//   previousButtonPagination.addEventListener("click", function(){
+//     contributorsBody.innerHTML = "";
+//     let previousPage = index-1;
+//     createBodyContributors(pagesArray[previousPage]);  
+    
+//   });
+//   nextButtonPagination.addEventListener("click", function(){
+//     contributorsBody.innerHTML = "";
+    
+//     let nextPage = index+1;
+//     console.log(index);
+//     console.log(nextPage);
+//     createBodyContributors(pagesArray[nextPage]); 
+     
+//   });
+// }
+
+
+function removeActive(allButtons){
+  allButtons.forEach(element =>{
+    element.classList.remove("active");
+  });
 }
 
 
@@ -314,9 +391,7 @@ function createPagination(arrayOfContributers){
       let startItem = (itemPerPage * i) ;
       let endItem = startItem + itemPerPage;
       let pageItems = arrayOfContributers.slice(startItem,endItem);
-      console.log(pageItems);
-      //createBodyContributors(pageItems);
-     // contributorsBody.style.display = "none";
+      
     
       const btn = document.createElement("BUTTON");
       btn.textContent = `${i+1}`;
@@ -326,9 +401,6 @@ function createPagination(arrayOfContributers){
       pagesTamplet[i] = btn;
     }
     linkButtonWithPage(itemstamplet,pagesTamplet);
-    console.log("Pages Tamplet",pagesTamplet);
-    console.log("Tamplet Items :",itemstamplet);
-    console.log("Number Of Pages",numberOfPages);
     containerPagination.appendChild(nextButtonPagination);
     
 }
@@ -336,16 +408,18 @@ function createPagination(arrayOfContributers){
 
 
 
-previousButtonPagination.onclick = previousPage;
-nextButtonPagination.onclick = nextPage;
+// previousButtonPagination.onclick = previousPage;
+// nextButtonPagination.onclick = nextPage;
 
-function previousPage(){
-  console.log("Previous");
-}
+// function previousPage(){
+//   console.log("Previous");
+  
+// }
 
-function nextPage(){
-  console.log("Next");
-}
+// function nextPage(){
+//   console.log("Next");
+ 
+// }
 
 
 /*********************************************************************/
